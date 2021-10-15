@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -122,14 +123,14 @@
         // if the data is scaled using log scale
         let logScale = d3.scaleLog().domain(
           d3.extent(geojson.features, (d) => {
-            return d["properties"]["POPCH00_10"];
+            return d["properties"]["POPCH90_00"];
           })
         );
 
         // if the data is scaled using linear scale
         let linearScale = d3.scaleLinear().domain(
           d3.extent(geojson.features, (d) => {
-            return d["properties"]["POPCH00_10"];
+            return d["properties"]["POPCH90_00"];
           })
         );
 
@@ -157,7 +158,7 @@
           .attr("d", (d) => geoPath_generator(d))
           //.attr("fill", d => colorInterpolator(logScale(d['properties']['POP2010'])))
           .attr("fill", (d) =>
-            colorInterpolator(linearScale(d["properties"]["POPCH00_10"]))
+            colorInterpolator(linearScale(d["properties"]["POPCH90_00"]))
           )
           .on("mouseenter", (m, d) => {
             tooltip.transition().duration(200).style("opacity", 0.9);
