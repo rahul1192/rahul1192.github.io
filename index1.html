@@ -40,10 +40,10 @@
     <div>
       <nav>
         <a href="index.html">Population in 1980</a>
-        <a href="index1.html">1980 to 1990</a>
-        <a href="index2.html">1990 to 2000</a>
+        <a href="1980-1990.html">1980 to 1990</a>
+        <a href="1990-2000.html">1990 to 2000</a>
         <a href="2000-2010.html">2000 to 2010</a>
-        <a href="visualisation.html">county wise</a>
+        <a href="visualisation.html">County wise</a>
       </nav>
     </div>
     <script>
@@ -122,14 +122,14 @@
         // if the data is scaled using log scale
         let logScale = d3.scaleLog().domain(
           d3.extent(geojson.features, (d) => {
-            return d["properties"]["POPCH90_00"];
+            return d["properties"]["POPCH80_90"];
           })
         );
 
         // if the data is scaled using linear scale
         let linearScale = d3.scaleLinear().domain(
           d3.extent(geojson.features, (d) => {
-            return d["properties"]["POPCH90_00"];
+            return d["properties"]["POPCH80_90"];
           })
         );
 
@@ -157,7 +157,7 @@
           .attr("d", (d) => geoPath_generator(d))
           //.attr("fill", d => colorInterpolator(logScale(d['properties']['POP2010'])))
           .attr("fill", (d) =>
-            colorInterpolator(linearScale(d["properties"]["POPCH90_00"]))
+            colorInterpolator(linearScale(d["properties"]["POPCH80_90"]))
           )
           .on("mouseenter", (m, d) => {
             tooltip.transition().duration(200).style("opacity", 0.9);
