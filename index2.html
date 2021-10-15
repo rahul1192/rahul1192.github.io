@@ -47,7 +47,7 @@
             width: window.innerWidth,
             height: window.innerHeight
         };
-        const margin = window_dims.width * .2
+        const margin = window_dims.width * 0.2
 
 
         /*-------------------------------------------------------*/
@@ -61,10 +61,7 @@
 
 
         // open both files
-        Promise.all([
-            d3.json(MA_counties),
-            d3.csv(gini_index)
-        ]).then(data => {
+        Promise.all([d3.json(MA_counties), d3.csv(gini_index ]).then(data => {
             // topology data
             const topo_data = data[0];
             // gini index data
@@ -96,28 +93,39 @@
             /*----------------geoPath generator----------------------*/
             /*-------------------------------------------------------*/
 
-            const geoPath_generator = d3.geoPath()
-                .projection(projections[3].fitSize([window_dims.width - margin, window_dims.height - margin], geojson))
-            let data_county = d3.group(csv_data,function(d){return d.id;});
-            console.log(data_county)
+            const geoPath_generator = d3
+            .geoPath()
+            .projection(
+                projections[3].fitSize(
+                    [window_dims.width - margin, window_dims.height - margin], 
+                    geojson
+                )
+            );
+            
         
             /*-------------------------------------------------------*/
             /*----------------------Color Scaling--------------------*/
             /*-------------------------------------------------------*/
             ////https://observablehq.com/@d3/working-with-color
-            var colorInterpolator = d3.interpolateRgbBasis(["blue", "steelblue", "green", "purple", "red"])
+            var colorInterpolator = d3.interpolateRgbBasis([
+                "blue", 
+                "steelblue", 
+                "green",
+                "purple",
+                "red",
+            ]);
                 // if the data is scaled using log scale
-            let logScale = d3.scaleLog()
-                .domain(d3.extent(geojson.features, (d) => {
-                    return d['properties']['POP1980']
-                }))
-
+            let logScale = d3.scaleLog().domain(
+          d3.extent(geojson.features, (d) => {
+            return d["properties"]["POPCH00_10"];
+          })
+        );
             // if the data is scaled using linear scale
-            let linearScale = d3.scaleLinear()
-                .domain(d3.extent(geojson.features, (d) => {
-                    return d['properties']['1980']
-                }))
-
+            let linearScale = d3.scaleLinear().domain(
+          d3.extent(geojson.features, (d) => {
+            return d["properties"]["POPCH00_10"];
+          })
+        );
             /*-------------------------------------------------------*/
             /*---------------------- Tooltip ------------------------*/
             /*-------------------------------------------------------*/
@@ -128,35 +136,36 @@
             /*--------------------------------------------------------*/
 
             // Append a SVG element to body, then append a path for the boundaries
-            let svg = d3.select("body").append("svg")
-                .attr("width", "100vw")
-                .attr("height", "100vh");
+            let svg = d3
+          .select("body")
+          .append("svg")
+          .attr("width", "100vw")
+          .attr("height", "100vh");
 
-            svg.selectAll("path")
-                .data(geojson.features)
-                .enter()
-                .append("path")
-                .attr("d", d => geoPath_generator(d))
-                //.attr("fill", d => colorInterpolator(logScale(d['properties']['POP2010'])))
-                .attr("fill", d => colorInterpolator(linearScale(data_county.GeographicAreaName)))
-                .on("mouseenter", (m, d) => {
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", .9)
-                    tooltip.html(data_county)
-                        .style("left", m.clientX + "px")
-                        .style("top", m.clientY + "px");
-                })
-                .on("mousemove", (m, d) => {
-                    tooltip.style("opacity", .9)
-                })
-                .on("mouseout", (m, d) => {
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", 0)
-                })
-        })
+        svg
+          .selectAll("path")
+          .data(geojson.features)
+          .enter()
+          .append("path")
+          .attr("d", (d) => geoPath_generator(d))
+          //.attr("fill", d => colorInterpolator(logScale(d['properties']['POP2010'])))
+          .attr("fill", (d) =>
+            colorInterpolator(linearScale(d["properties"]["POPCH00_10"]))
+          )
+          .on("mouseenter", (m, d) => {
+            tooltip.transition().duration(200).style("opacity", 0.9);
+            tooltip
+              .html(d["properties"]["TOWN"])
+              .style("left", m.clientX + "px")
+              .style("top", m.clientY + "px");
+          })
+          .on("mousemove", (m, d) => {
+            tooltip.style("opacity", 0.9);
+          })
+          .on("mouseout", (m, d) => {
+            tooltip.transition().duration(200).style("opacity", 0);
+          });
+      });
     </script>
-</body>
-
+  </body>
 </html>
