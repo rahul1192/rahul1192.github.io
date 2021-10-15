@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./libs/d3.js"></script>
+    <script src="./d3.js"></script>
     <script src="https://d3js.org/topojson.v1.min.js"></script>
     <title>MA Map</title>
     <style>
@@ -62,9 +62,9 @@
       /*-------------------------------------------------------*/
 
       // a topojson file containing population of each town in different years
-      const MA_counties = "./data/towns.topojson";
+      const MA_counties = "./towns.topojson";
       // gini index per county
-      const gini_index = "./data/gini_index.csv";
+      const gini_index = "./gini_index.csv";
 
       // open both files
       Promise.all([d3.json(MA_counties), d3.csv(gini_index)]).then((data) => {
